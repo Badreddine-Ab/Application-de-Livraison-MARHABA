@@ -1,0 +1,20 @@
+{
+  "name": "application-de-livraison-marhaba",
+  "version": "1.0.0",
+  "description": "développer une application pour la restaurant mar7aba avec un service de livraison à domicile",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Equipe Badreddine",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "mongoose": "^6.6.5"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.20"
+  }
+}
