@@ -7,6 +7,5 @@ const GetUserClient =  (req,res) => {
 
 
 module.exports = {
-
     GetUserClient
 }
