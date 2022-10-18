@@ -4,6 +4,7 @@ const bcrypt = require('bcryptjs')
 const apiError = require('../Utils/apiError')
 const { response } = require('express')
 const jwt = require('jsonwebtoken')
+const role = require('../Models/roleModel')
 const JWT_SECRET = 'jlhfzmkugfajgfauig'
 // method : post
 // url : api/auth/login
@@ -12,8 +13,8 @@ const JWT_SECRET = 'jlhfzmkugfajgfauig'
 
  const Login =  async (req,res) => {
     const {email, password} = req.body
-    const user = await User.findOne({email}).lean()
-
+    const user = await User.findOne({email}).lean().populate('role')
+    
     if(!user){
         return next( new apiError('Invalid email/password',400))
     }
@@ -25,7 +26,8 @@ const JWT_SECRET = 'jlhfzmkugfajgfauig'
         }, 
         JWT_SECRET
         )
-        return res.json({ status:"ok", data:token })
+        return res.status(200).send(`Bonjour ${user.username} : Votre Role est ${user.role[0].name}`)
+        // return res.status(200).send(user)
     }
 }
 
