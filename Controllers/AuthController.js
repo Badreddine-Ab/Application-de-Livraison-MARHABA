@@ -1,34 +1,55 @@
 const User = require('../Models/userModel')
+const Role = require('../Models/roleModel')
 const bcrypt = require('bcryptjs')
 const apiError = require('../Utils/apiError')
 const { response } = require('express')
+const jwt = require('jsonwebtoken')
+const JWT_SECRET = 'jlhfzmkugfajgfauig'
 // method : post
 // url : api/auth/login
 // acces : Public
+
+
  const Login =  async (req,res) => {
-    const {username, password} = req.body
-    const user = await User.findOne({username}).lean()
-    res.status(200).send(req.body)
+    const {email, password} = req.body
+    const user = await User.findOne({email}).lean()
+
+    if(!user){
+        return next( new apiError('Invalid email/password',400))
+    }
+    if(await bcrypt.compare(password,user.password)){
+        const token = jwt.sign({ 
+            id: user._id,
+            email: user.email,
+            username:user.username
+        }, 
+        JWT_SECRET
+        )
+        return res.json({ status:"ok", data:token })
+    }
 }
 
 // Re
 const Register =  async (req,res,next) => {
-    const {username,password: plainTextPassword} = req.body
+    const {username,password: plainTextPassword,email,role} = req.body
     if(!username || typeof username !== 'string'){
        return next( new apiError(`Invalid Username`,409))
+    }
+    if(!email || typeof email !== 'string'){
+       return next( new apiError(`Invalid email`,409))
     }
     if(!plainTextPassword || typeof plainTextPassword !== 'string'){
         return next( new apiError(`Invalid password`,409))
     }
-    if(!plainTextPassword.length < 5){
-        return next( new apiError(`Password too short, should be at least 6 charachters`,409))
-    }
+    
     
     const password = await bcrypt.hash(plainTextPassword, 3)
     try{
         const response = await User.create({
             username,
-            password
+            email,
+            password,
+            role
         })
          new apiError(`User created succesfully`,200)
     }catch(error){
