@@ -20,7 +20,12 @@ const UserSchema = new mongoose.Schema({
           type: mongoose.Schema.Types.ObjectId,
           ref: "role"
         }
-      ]
+      ],
+    isActive:{
+        type: Boolean,
+        default: false
+    },
+    activationCode: String
 },
 { collection: 'users'}
 )

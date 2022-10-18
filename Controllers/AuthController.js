@@ -1,23 +1,25 @@
 const User = require('../Models/userModel')
-const Role = require('../Models/roleModel')
 const bcrypt = require('bcryptjs')
 const apiError = require('../Utils/apiError')
 const { response } = require('express')
 const jwt = require('jsonwebtoken')
-const role = require('../Models/roleModel')
 const JWT_SECRET = 'jlhfzmkugfajgfauig'
+const role = require('../Models/roleModel')
 // method : post
 // url : api/auth/login
 // acces : Public
 
 
- const Login =  async (req,res) => {
+ const Login =  async (req,res,next) => {
     const {email, password} = req.body
     const user = await User.findOne({email}).lean().populate('role')
     
     if(!user){
         return next( new apiError('Invalid email/password',400))
     }
+   if(await bcrypt.compare(password,user.password) && user && !user.isActive){
+    return next( new apiError(`veuillez verifiez votre boite email pour l'activation`,401))
+   }
     if(await bcrypt.compare(password,user.password)){
         const token = jwt.sign({ 
             id: user._id,
@@ -26,8 +28,8 @@ const JWT_SECRET = 'jlhfzmkugfajgfauig'
         }, 
         JWT_SECRET
         )
-        return res.status(200).send(`Bonjour ${user.username} : Votre Role est ${user.role[0].name}`)
-        // return res.status(200).send(user)
+        // return res.json({status:'ok', data:token})
+        return res.status(200).send(user)
     }
 }
 
@@ -47,7 +49,8 @@ const Register =  async (req,res,next) => {
     
     const password = await bcrypt.hash(plainTextPassword, 3)
     try{
-        const response = await User.create({
+        const response = await User.create
+        ({
             username,
             email,
             password,
