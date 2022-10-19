@@ -38,7 +38,7 @@ for (let i = 0; i < 25; i++) {
         JWT_SECRET
         )
         // return res.json({status:'ok', data:token})
-        return res.status(200).send(user)
+        return res.status(200).send(token)
     }
 }
 
