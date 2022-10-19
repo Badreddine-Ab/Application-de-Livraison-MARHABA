@@ -6,7 +6,7 @@ var validateEmail = function(email) {
 };
 
 const UserSchema = new mongoose.Schema({
-    username : {type: String, required: true, unique:true},
+    username : {type: String, required: true},
     email: {type: String,
         trim: true,
         unique: true,
@@ -21,11 +21,14 @@ const UserSchema = new mongoose.Schema({
           ref: "role"
         }
       ],
-    isActive:{
-        type: Boolean,
-        default: false
-    },
-    activationCode: String
+      status: {
+        type: String, 
+        enum: ['Pending', 'Active'],
+        default: 'Pending'
+      },
+      confirmationCode: { 
+        type: String, 
+        unique: true },
 },
 { collection: 'users'}
 )
