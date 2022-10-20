@@ -7,13 +7,14 @@ const jwt = require('jsonwebtoken')
 const JWT_SECRET = 'jlhfzmkugfajgfauig'
 const Role = require('../Models/roleModel')
 const nodemailer = require('../Config/nodemailer.config')
+const {LocalStorage} = require("node-localstorage")
 
 const characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 let token = '';
 for (let i = 0; i < 25; i++) {
     token += characters[Math.floor(Math.random() * characters.length )];
 }
-
+var localStorage = new LocalStorage('./scratch')
 
 // method : post
 // url : api/auth/login
@@ -37,6 +38,9 @@ for (let i = 0; i < 25; i++) {
         }, 
         JWT_SECRET
         )
+        // console.log('Got the token:', token)
+        localStorage.setItem('token',token)
+        console.log('this is the token '+localStorage.getItem('token'))
         // return res.json({status:'ok', data:token})
         return res.status(200).send(token)
     }
@@ -96,9 +100,24 @@ const VerifyUser = (req, res, next) => {
 const ForgetPassword =  (req,res) => {
     res.status(200).send('this a Forget Password function')
 }
-const ResetPassword =  (req,res) => {
-    // token = req.params.id
-    res.status(200).send('this a reset Password function of')
+const ResetPassword = async (req,res,next) => {
+    const { token } = req.params
+    const newpassword = req.body
+    try {
+      const user = jwt.verify(token, JWT_SECRET)
+      const _id = user.id
+      
+      const password =  bcrypt.hashSync(req.body.newpassword,8)
+      await User.updateOne({_id},
+        {
+          $set : {password}
+        })
+      return res.status(200).send('status changed')
+    } catch(error){
+      console.log(error)
+      next(new apiError(';))',400))
+    }
+
 }
 
 
