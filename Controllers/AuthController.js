@@ -68,11 +68,12 @@ const Register =  async (req,res,next) => {
            message:
              "User was registered successfully! Please check your email",
         });
+        const link = `http://localhost:${process.env.PORT}/api/auth/confirm/${user.confirmationCode}`
 
       nodemailer.sendConfirmationEmail(
          user.username,
          user.email,
-         user.confirmationCode
+         link
   );
 });
    
@@ -97,27 +98,49 @@ const VerifyUser = (req, res, next) => {
       .catch((e) => console.log("error", e));
   };
 
-const ForgetPassword =  (req,res) => {
-    res.status(200).send('this a Forget Password function')
+const ForgetPassword = async (req,res,next) => {
+  const {email} = req.body
+  let user = await User.findOne({email})
+  if(email !== user.email){
+    return next(new apiError("User not registered",404))
+  }
+  // User exist and now create a one time link valid for 10minutes
+  // const secret = JWT_SECRET + user.password
+  // const payload = {
+  //   email:user.email,
+  //   id:user._id
+  // }
+  // const token = localStorage.getItem('token')
+  const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzNTEwNWQ1NzlhZmE0OGFmMDY4ZTg0OCIsImVtYWlsIjoiYWJvZG9sbGFyLmNhcGdlbWluaUBnbWFpbC5jb20iLCJ1c2VybmFtZSI6ImJhZHIiLCJpYXQiOjE2NjYyNzQyNDh9.afVwVRhOH6eFQ6QR7Z_Da_dJ0VBAuUDmkbCxtAshY7s"
+
+const link = `http://localhost:8080/api/auth/resetpassword/${token}`
+res.send("Password link has been sent t your email...")
+nodemailer.sendConfirmationEmail(
+         user.username,
+         user.email,
+         link
+  ); 
+console.log(link)
 }
 const ResetPassword = async (req,res,next) => {
-    const { token } = req.params
-    const newpassword = req.body
+  const {token} = req.params
+    const newpassword = await  req.body
     try {
       const user = jwt.verify(token, JWT_SECRET)
+  console.log(user)
       const _id = user.id
-      
-      const password =  bcrypt.hashSync(req.body.newpassword,8)
-      await User.updateOne({_id},
+      const password= bcrypt.hashSync(req.body.newpassword, 8)
+      await User.findByIdAndUpdate(_id,
         {
-          $set : {password}
+          password
         })
       return res.status(200).send('status changed')
     } catch(error){
       console.log(error)
       next(new apiError(';))',400))
     }
-
+  
+  
 }
 
 

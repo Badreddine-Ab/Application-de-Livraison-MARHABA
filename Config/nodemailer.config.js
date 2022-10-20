@@ -14,7 +14,7 @@ const transport = nodemailer.createTransport({
   },
 });
 
-module.exports.sendConfirmationEmail = (name, email, confirmationCode) => {
+module.exports.sendConfirmationEmail = (name, email,link) => {
     console.log("Check");
     transport.sendMail({
       from: user,
@@ -23,7 +23,7 @@ module.exports.sendConfirmationEmail = (name, email, confirmationCode) => {
       html: `<h1>Email Confirmation</h1>
           <h2>Hello ${name}</h2>
           <p> Please confirm your email by clicking on the following link</p>
-          <a href=http://localhost:${process.env.PORT}/api/auth/confirm/${confirmationCode}> Click here</a>
+          <a href=${link}> Click here</a>
           </div>`,
     }).catch(err => console.log(err));
   };
