@@ -167,6 +167,9 @@ const ResetPassword = async (req,res,next) => {
   
 }
 
+// method : get
+// url : api/auth/logout
+// acces : private
 const LogOut =  (req, res) => {
   return res
     .clearCookie("access_token")
