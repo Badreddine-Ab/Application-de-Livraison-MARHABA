@@ -2,16 +2,18 @@
 import './App.css';
 import Registration from './Pages/Login';
 import Signup from './Pages/Signup'
-import { Route,Routes } from 'react-router-dom'
+import {BrowserRouter, Route,Routes } from 'react-router-dom'
 
 function App() {
   return (
     <>
+    <BrowserRouter>
     <Routes>
-      <Route path="/Signin" element={<Registration/>}/>
+      <Route path="/" element={<Registration/>}/>
       <Route path="/Signup" element={<Signup/>}/>
     </Routes>
     <Registration/>
+    </BrowserRouter>
     </>
   );
 }

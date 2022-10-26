@@ -1,4 +1,6 @@
 import Input from "./Input"
+import {Link,useMatch,useResolvedPath} from "react-router-dom"
+
 export default function Form(props){
 
     return(
@@ -16,15 +18,26 @@ export default function Form(props){
                               <input id="terms" aria-describedby="terms" type="checkbox" className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800" required=""/>
                             </div>
                             <div className="ml-3 text-sm">
-                              <label for="terms" className="font-light text-gray-500 dark:text-gray-300">I accept the <a className="font-medium text-primary-600 hover:underline dark:text-primary-500" href="#">Terms and Conditions</a></label>
+                              <label for="terms" className="font-light text-gray-500 dark:text-gray-300">I accept the <a className="font-medium text-primary-600 hover:underline dark:text-primary-500" >Terms and Conditions</a></label>
                             </div>
                         </div>
                         <button type="submit" className="w-full text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 hover:text-gold dark:focus:ring-primary-800">Create an account</button>
                         <p className="text-sm font-light text-gray-500 dark:text-gray-400">
-                            Already have an account? <a href="#" className="font-medium text-gold hover:underline dark:text-primary-500">Login here</a>
+                           You don't have an account ? <CustomLink to="/Signup" className="font-medium text-gold hover:underline dark:text-primary-500">Signup here</CustomLink>
                         </p>
                     </form>
                 </div>
             </div>
+    )
+}
+
+function CustomLink({to,children,...props}){
+    const resolvedPath = useResolvedPath(to)
+    const isActive = useMatch({path: resolvedPath.pathname, end:true})
+    return(
+
+        <Link className={isActive ? "active" : ""} to={to} {...props}> 
+            {children}
+        </Link>
     )
 }
