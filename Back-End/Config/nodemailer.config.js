@@ -9,13 +9,13 @@ const pass = process.env.pass;
 const transport = nodemailer.createTransport({
   service: "Gmail",
   auth: {
-    user: user,
-    pass: pass,
+    user,
+    pass
   },
 });
 
 module.exports.sendConfirmationEmail = (name, email,link) => {
-    console.log("Check");
+    console.log("Email sent");
     transport.sendMail({
       from: user,
       to: email,

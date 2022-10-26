@@ -14,7 +14,7 @@ let token = '';
 for (let i = 0; i < 25; i++) {
     token += characters[Math.floor(Math.random() * characters.length )];
 }
-var localStorage = new LocalStorage('./scratch')
+
 
 // method : post
 // url : api/auth/login
@@ -22,7 +22,7 @@ var localStorage = new LocalStorage('./scratch')
  const Login =  async (req,res,next) => {
     const {email, password} = req.body
     const user = await User.findOne({email}).lean().populate('role')
-    console.log(user.role[0].name)
+    // console.log(user.role[0].name)
     if(!user){
         return next( new apiError('Invalid email/password',400))
     }
@@ -88,13 +88,13 @@ const Register =  async (req,res,next) => {
 });
    
 }
-const VerifyUser = (req, res, next) => {
+const VerifyUserMail = (req, res, next) => {
     User.findOne({
       confirmationCode: req.params.confirmationCode,
     })
       .then((user) => {
         if (!user) {
-          return next(new apiError('User not founs!',404))
+          return next(new apiError('User not found!',404))
         }
   
         user.status = "Active";
@@ -182,7 +182,7 @@ const LogOut =  (req, res) => {
 module.exports = {
     Login,
     Register,
-    VerifyUser,
+    VerifyUserMail,
     ForgetPassword,
     ResetPassword,
     LogOut,
