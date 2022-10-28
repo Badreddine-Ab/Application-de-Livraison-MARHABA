@@ -4,11 +4,10 @@ const bcrypt = require('bcryptjs')
 const apiError = require('../Utils/apiError')
 const { response } = require('express')
 const jwt = require('jsonwebtoken')
-const JWT_SECRET = 'jlhfzmkugfajgfauig'
+
 const Role = require('../Models/roleModel')
 const nodemailer = require('../Config/nodemailer.config')
-const {LocalStorage} = require("node-localstorage")
-const authorization = require('../Middlewares/auth.middleware')
+
 const characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
 let token = '';
 for (let i = 0; i < 25; i++) {
@@ -21,14 +20,23 @@ for (let i = 0; i < 25; i++) {
 // acces : Public
  const Login =  async (req,res,next) => {
     const {email, password} = req.body
+    
+    if (!(email && password)) {
+      return next(new apiError('Data not formatted properly',400));
+    }
+
     const user = await User.findOne({email}).lean().populate('role')
     // console.log(user.role[0].name)
     if(!user){
-        return next( new apiError('Invalid email/password',400))
+        return next( new apiError('Invalid email',400))
     }
-   if(await bcrypt.compare(password,user.password) && user && user.status == 'Pending'){
+    const ValidPassword = await bcrypt.compare(password,user.password)
+    if(!ValidPassword){
+      return next( new apiError('Invalid password',400))
+    }
+   else if(ValidPassword && user && user.status == 'Pending'){
     return next( new apiError("Pending Account. Please Verify Your Email!",401))
-   }
+   }else {
    try {
     await bcrypt.compare(password,user.password)
 
@@ -52,7 +60,7 @@ for (let i = 0; i < 25; i++) {
    } catch (error) {
       return(next(apiError('problem in the login , please check your email and password and try again',500)))
    }
-   
+  }
   }
 // method : post
 // url : api/auth/register
