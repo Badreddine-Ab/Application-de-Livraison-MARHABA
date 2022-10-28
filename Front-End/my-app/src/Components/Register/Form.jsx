@@ -12,7 +12,7 @@ export default function Form(props){
                     <form className="space-y-4 md:space-y-6" action="#">
                        <Input label="Your Email" placeHolder="badr@youcode.com" input="email"/>
                        <Input label="Your Password" placeHolder="*********" input="password"/>
-                       <Input label="Repeat Password" placeHolder="*********" input="password-repeat"/>
+                       <Input label="Repeat Password" placeHolder="*********" input="password"/>
                         <div className="flex items-start">
                             <div className="flex items-center h-5">
                               <input id="terms" aria-describedby="terms" type="checkbox" className="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800" required=""/>
