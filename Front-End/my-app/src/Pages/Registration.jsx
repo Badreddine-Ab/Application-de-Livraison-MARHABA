@@ -1,12 +1,12 @@
-import React , {useState} from "react";
+import React , {useState, useContext} from "react";
 import Header from "../Components/Register/Header"
 import Form from "../Components/Register/Form"
 import Input from "../Components/Register/Input";
 import {useNavigate} from 'react-router-dom'
-
+import axios from "axios";
 
 export default function Registration() {
-    const navigate=useNavigate();
+
 
     const [form,setForm] = useState({
         email:'',
@@ -23,12 +23,27 @@ export default function Registration() {
 
       let [error,setError]=useState('');
 
+      const HandleSubmit = async(e) => {
+        e.preventDefault()
+        
+        try {
+            const res = await axios.post("http://localhost:8080/api/auth/register", form);
+            //registersuccess
+           
+            console.log(res.data);
+          }catch(er){
+            //register failed
+            console.log(er.response)
+            setError(er.response.data.message);
+          }
+     }
+
 
     return (
         <section className="bg-gray-50 dark:bg-gray-900">
         <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
             <Header/>
-            <Form Title="Create an account" to="/login" navigate="Already have an account ?" redirect="Signin here">
+            <Form Title="Create an account" error={error} to="/login" navigate="Already have an account ?" redirect="Signin here"  HandleSubmit={HandleSubmit}>
                 <Input handleChange={handleChange} state={form.email} setState={setForm} label="Your Email" placeHolder="badr@youcode.com" input="email"/>
                 <Input handleChange={handleChange} state={form.username} setState={setForm} label="Your Username" placeHolder="Badrestronger" input="username"/>
                 <Input handleChange={handleChange} state={form.password} setState={setForm} label="Your Password" placeHolder="*********" input="password"/>
@@ -36,9 +51,9 @@ export default function Registration() {
 
                 <select id="roles" onChange={handleChange} name="role" className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-gold focus:border-gold block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-gold dark:focus:border-gold">
                 <option select hidden>Select Your Role</option>
-                <option value="id1">Client</option>
-                <option value="id2">DelevreyMan</option>
-                <option value="id3">Manager</option>
+                <option value="1">Client</option>
+                <option value="2">DelevreyMan</option>
+                <option value='634e5dbf1a111ed3d51f7e68' >Manager</option>
                 </select>
             </Form>
         </div>

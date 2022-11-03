@@ -1,12 +1,14 @@
-import React, { useState, useContext} from "react";
+import React, { useState, useContext,useEffect} from "react";
 import Header from "../Components/Register/Header"
 import Form from "../Components/Register/Form"
 import Input from "../Components/Register/Input";
 import axios from "axios";
-
+import {UserDataContext} from "../App";
+import {useNavigate} from 'react-router-dom'
 
 export default function Login() {
- 
+    const navigate=useNavigate();
+    let {connectedUserData,setUserData}=useContext(UserDataContext);
     let [error,setError]=useState('');
     const [form,setForm] = useState({
         email:'',
@@ -23,17 +25,24 @@ export default function Login() {
         e.preventDefault()
         
         try {
-            const res = await axios.post("http://localhost:8080/api/auth/login", form);
+            const res = await axios.post("http://localhost:8080/api/auth/login", form, {withCredentials: true});
             //login success
+            setUserData(res.data);
             console.log(res.data);
           }catch(er){
             //login failed
-            console.log(er)
+            console.log(er.response)
             setError(er.response.data.message);
           }
      }
-      
-    
+
+     useEffect(()=>{
+        if(connectedUserData!==null){
+          navigate('/user')
+        }
+
+      },[connectedUserData])
+     
 
     return (
         <section className="bg-gray-50 dark:bg-gray-900">

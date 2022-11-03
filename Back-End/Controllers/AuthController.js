@@ -55,7 +55,8 @@ for (let i = 0; i < 25; i++) {
         secure: process.env.NODE_ENV === "production",
       })
       .status(200)
-      .json({ message: "Logged in successfully 😊 👌" });
+      .json({ message: "Logged in successfully 😊 👌" })
+      
     
    } catch (error) {
       return(next(apiError('problem in the login , please check your email and password and try again',500)))
@@ -79,7 +80,7 @@ const Register =  async (req,res,next) => {
 
   user.save((err) => {
     if (err) {
-      next( new apiError('AN error has accured',500))
+      console.log(err)
            return;
         }
        res.send({
@@ -104,7 +105,7 @@ const VerifyUserMail = (req, res, next) => {
         if (!user) {
           return next(new apiError('User not found!',404))
         }
-  
+
         user.status = "Active";
         user.save((err) => {
           if (err) {
