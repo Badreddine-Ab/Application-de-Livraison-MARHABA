@@ -8,7 +8,7 @@ import LandingPage from './Pages/LandingPage';
 import HelloUser from './Pages/HelloUser';
 import { isAuthenticated } from './helper';
 import ForgetPassword from './Pages/ForgetPassword';
-import { AuthProvider } from './Context/AuthProvider';
+
 import ResetPassword from './Pages/ResetPassword';
 
 
@@ -31,19 +31,19 @@ const PublicRoute = ({ children }) => {
   return (
   
       <div>
-         <AuthProvider>
+       
         <BrowserRouter>
           <Routes>
             <Route path='/' element={<LandingPage/>} />
             <Route path='/register' element={ <PublicRoute> <Registration/> </PublicRoute>} />
             <Route path='/login' element={<PublicRoute> <Login/></PublicRoute>} />
-            <Route path='/user' element={<PrivateRoute><HelloUser/></PrivateRoute>} />
+            <Route path='/user' element={<PrivateRoute> <HelloUser/></PrivateRoute>} />
             <Route path='/forgetPassword' element={<PublicRoute><ForgetPassword/></PublicRoute>} />
             <Route path='/resetPassword/:token' element={<PublicRoute><ResetPassword/></PublicRoute> } />
             <Route path='*' element={<ErrorPage/>} />
           </Routes>
         </BrowserRouter>
-        </AuthProvider>
+      
     </div>
   
   );

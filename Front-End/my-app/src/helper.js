@@ -12,7 +12,7 @@ export const isAuthenticated = () => {
 
     if(jwt) {
 
-        return JSON.parse(jwt)
+        return jwt
 
     }
 

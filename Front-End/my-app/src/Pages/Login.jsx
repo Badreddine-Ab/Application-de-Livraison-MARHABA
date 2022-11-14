@@ -3,13 +3,13 @@ import Header from "../Components/Register/Header"
 import Form from "../Components/Register/Form"
 import Input from "../Components/Register/Input";
 import axios from "axios";
-import AuthContext from "../Context/AuthProvider";
+
 import Cookies from 'js-cookie';
 
 import {useNavigate} from 'react-router-dom'
 
 export default function Login() {
-  const { setAuth } = useContext(AuthContext);
+
   const navigate = useNavigate()
 
 
@@ -32,10 +32,8 @@ export default function Login() {
         try {
             const res = await axios.post("http://localhost:8080/api/auth/login", form, {withCredentials: true});
             //login success
-            console.log(res)
-            console.log(res.data);
-            const accessToken = Cookies.get('access_token')
-            setAuth({accessToken})
+   
+           
             navigate('/user')
             setError('')
             setResponse(res.data)
