@@ -11,13 +11,13 @@ export default function Form(props){
              
                 <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
                     <p className="text-base font-light text-red-500 dark:text-red-400">
-                    {props.error}
+                    { props.error ? props.error : props.response}
                     </p>
                     <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
                     {props.Title}
                     
                     </h1>
-                    <form className="space-y-4 md:space-y-6" onSubmit={props.HandleSubmit} action="">
+                    <form className="space-y-4 md:space-y-6" onSubmit={props.HandleSubmit} method={props.method} action="">
                        {props.children}
                         <div className="flex items-start">
                             <div className="flex items-center h-5">

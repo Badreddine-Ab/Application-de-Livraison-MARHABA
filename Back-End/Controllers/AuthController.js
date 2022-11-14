@@ -18,6 +18,19 @@ for (let i = 0; i < 25; i++) {
 // method : post
 // url : api/auth/login
 // acces : Public
+const Roles = async(req,res)=> {
+
+  Role.find({}, function(err, roles) {
+    var rolesMap = {};
+
+    roles.forEach(function(roels) {
+      rolesMap[roels._id] = roels;
+    });
+
+    res.send(rolesMap);  
+  });
+}
+
  const Login =  async (req,res,next) => {
     const {email, password} = req.body
     
@@ -124,9 +137,10 @@ const VerifyUserMail = (req, res, next) => {
 const ForgetPassword = async (req,res,next) => {
   const {email} = req.body
   let user = await User.findOne({email})
-  if(email !== user.email){
-    return next(new apiError("User not registered",404))
-  }
+  
+if(!user){
+  return next(new apiError("User not found", 404))
+}
   // User exist and now create a one time link valid for 10minutes
   const token = jwt.sign({ 
     id: user._id,
@@ -137,7 +151,7 @@ const ForgetPassword = async (req,res,next) => {
 process.env.JWT_SECRET,
 {expiresIn:'10m'}
 )
-  console.log('this is the token :',token)
+
 
   // const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzNTEwNWQ1NzlhZmE0OGFmMDY4ZTg0OCIsImVtYWlsIjoiYWJvZG9sbGFyLmNhcGdlbWluaUBnbWFpbC5jb20iLCJ1c2VybmFtZSI6ImJhZHIiLCJpYXQiOjE2NjYyNzQyNDh9.afVwVRhOH6eFQ6QR7Z_Da_dJ0VBAuUDmkbCxtAshY7s"
 
@@ -148,7 +162,7 @@ nodemailer.sendConfirmationEmail(
          user.email,
          link
   ); 
-console.log(link)
+
 }
 
 
@@ -195,5 +209,5 @@ module.exports = {
     ForgetPassword,
     ResetPassword,
     LogOut,
- 
+    Roles
   }
