@@ -51,7 +51,7 @@ export default function ForgetPassword() {
             <Header/>
             
             <Form Title="Forget Password"  error={error} response={response}   state={form} setState={setForm} HandleSubmit={HandleSubmit} method="post">
-                <Input handleChange={handleChange} state={form.email} setState={setForm} label="Your Email" placeHolder="badr@youcode.com" input="email"/>
+                <Input handleChange={handleChange} state={form.email} setState={setForm} label="Your Email" placeHolder="badr@youcode.com" name='email' input="email"/>
 
             </Form>
         </div>

@@ -1,37 +1,51 @@
-
+import { Fragment } from 'react';
 import './App.css';
 import Registration from './Pages/Registration';
 import Login from './Pages/Login'
 import ErrorPage from './Pages/ErrorPage';
-import {BrowserRouter, Route,Routes } from 'react-router-dom'
+import {BrowserRouter, Route,Routes , Navigate } from 'react-router-dom'
 import LandingPage from './Pages/LandingPage';
 import HelloUser from './Pages/HelloUser';
+import { isAuthenticated } from './helper';
 import ForgetPassword from './Pages/ForgetPassword';
-import { useContext,createContext,useState,useEffect} from 'react';
-import Cookies from 'js-cookie';
+import { AuthProvider } from './Context/AuthProvider';
 import ResetPassword from './Pages/ResetPassword';
 
-export const UserDataContext=createContext();
+
 function App() {
-  let [connectedUserData,setUserData]=useState((Cookies.get('access_token')));
+  
+  const PrivateRoute = ({ children }) => {
+    return isAuthenticated() ? (
+        <Fragment>
+            <user />
+            {children}
+        </Fragment>
+    ) : <Navigate to="/login" />
+}
+
+const PublicRoute = ({ children }) => {
+    return isAuthenticated() ? <Navigate to="/user" /> : children
+}
   
 
   return (
-    <UserDataContext.Provider value={{connectedUserData,setUserData}}>
+  
       <div>
+         <AuthProvider>
         <BrowserRouter>
           <Routes>
             <Route path='/' element={<LandingPage/>} />
-            <Route path='/register' element={<Registration/>} />
-            <Route path='/login' element={<Login/>} />
-            <Route path='/user' element={<HelloUser/>} />
-            <Route path='/forgetPassword' element={<ForgetPassword/>} />
-            <Route path='/resetPassword/:token' element={<ResetPassword/>} />
+            <Route path='/register' element={ <PublicRoute> <Registration/> </PublicRoute>} />
+            <Route path='/login' element={<PublicRoute> <Login/></PublicRoute>} />
+            <Route path='/user' element={<PrivateRoute><HelloUser/></PrivateRoute>} />
+            <Route path='/forgetPassword' element={<PublicRoute><ForgetPassword/></PublicRoute>} />
+            <Route path='/resetPassword/:token' element={<PublicRoute><ResetPassword/></PublicRoute> } />
             <Route path='*' element={<ErrorPage/>} />
           </Routes>
         </BrowserRouter>
+        </AuthProvider>
     </div>
-  </UserDataContext.Provider>
+  
   );
 }
 

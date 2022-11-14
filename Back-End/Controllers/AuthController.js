@@ -64,7 +64,7 @@ const Roles = async(req,res)=> {
       // console.log('Got the token:', token)
       return res
       .cookie("access_token", token, {
-        httpOnly: true,
+        
         secure: process.env.NODE_ENV === "production",
       })
       .status(200)
@@ -137,10 +137,11 @@ const VerifyUserMail = (req, res, next) => {
 const ForgetPassword = async (req,res,next) => {
   const {email} = req.body
   let user = await User.findOne({email})
-  
+  console.log(email)
 if(!user){
   return next(new apiError("User not found", 404))
 }
+
   // User exist and now create a one time link valid for 10minutes
   const token = jwt.sign({ 
     id: user._id,
@@ -155,7 +156,7 @@ process.env.JWT_SECRET,
 
   // const token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzNTEwNWQ1NzlhZmE0OGFmMDY4ZTg0OCIsImVtYWlsIjoiYWJvZG9sbGFyLmNhcGdlbWluaUBnbWFpbC5jb20iLCJ1c2VybmFtZSI6ImJhZHIiLCJpYXQiOjE2NjYyNzQyNDh9.afVwVRhOH6eFQ6QR7Z_Da_dJ0VBAuUDmkbCxtAshY7s"
 
-const link = `http://localhost:8080/api/auth/resetpassword/${token}`
+const link = `http://localhost:3000/resetPassword/${token}`
 res.send("Password link has been sent t your email...")
 nodemailer.sendConfirmationEmail(
          user.username,

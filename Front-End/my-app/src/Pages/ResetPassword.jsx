@@ -55,7 +55,7 @@ export default function ResetPassword() {
             <Input handleChange={handleChange} state={form.password} name="newpassword" setState={setForm} label="Your new Password"  input="password"/>
             </Form>
         </div>
-    <p className="text-white"> This is {JSON.stringify(form)}</p>
+  
       </section>
         
     );
