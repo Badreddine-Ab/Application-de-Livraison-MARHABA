@@ -17,7 +17,6 @@ function App() {
   const PrivateRoute = ({ children }) => {
     return isAuthenticated() ? (
         <Fragment>
-            <user />
             {children}
         </Fragment>
     ) : <Navigate to="/login" />
