@@ -3,6 +3,7 @@ import Header from "../Components/Register/Header"
 import Form from "../Components/Register/Form"
 import Input from "../Components/Register/Input";
 import axios from "axios";
+import {Link} from "react-router-dom"
 
 import Cookies from 'js-cookie';
 
@@ -60,7 +61,7 @@ export default function Login() {
                 <Input handleChange={handleChange} name ="password" state={form.password} setState={setForm} label="Your Password" placeHolder="*********" input="password"/>
             </Form>
         </div>
-    <p className="text-white"> This is {JSON.stringify(form)}</p>
+
       </section>
     );
 }

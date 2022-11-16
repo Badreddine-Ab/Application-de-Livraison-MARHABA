@@ -26,8 +26,6 @@ app.use('/api/client',routerClient)
 
 dbConnection();
 
-
-
 app.all('*',(req,res,next) => {
     next(new apiError(`Can't find this route: ${req.originalUrl}`,400))
 })
