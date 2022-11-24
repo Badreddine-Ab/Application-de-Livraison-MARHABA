@@ -25,22 +25,17 @@ export default function ResetPassword() {
 
       const HandleSubmit = async(e) => {
         e.preventDefault()
-        
         try {
-            const res = await axios.post(`http://localhost:8080/api/auth/resetpassword/${token}`, form, {withCredentials: true});
-            
-            
-            console.log(res.data);
-            setError('');
-            setResponse(res.data);
-            
-          }catch(er){
-            //login failed
-            console.log(er.response)
-            setResponse('');
-            setError(er.response.data.message);
+          const response = axios.post(`http://localhost:8080/api/auth/resetPassword/${token}`, form, Credential=true)
 
-          }
+
+          setResponse((await response).data)
+
+        } catch (error) {
+          console.log(error)
+        }
+       
+
      }
 
      let { token } = useParams()

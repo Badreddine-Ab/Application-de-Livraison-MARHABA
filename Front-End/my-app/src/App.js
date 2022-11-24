@@ -13,7 +13,7 @@ import ResetPassword from './Pages/ResetPassword';
 
 
 function App() {
-  
+
   const PrivateRoute = ({ children }) => {
     return isAuthenticated() ? (
         <Fragment>
