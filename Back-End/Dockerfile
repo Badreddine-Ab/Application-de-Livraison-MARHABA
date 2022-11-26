@@ -17,7 +17,7 @@ RUN npm install
 COPY . .
 
 #exposing the port so we can access it further
-EXPOSE 5000
+EXPOSE 8080
 
 #starting the server
 CMD ["node", "server.js"]

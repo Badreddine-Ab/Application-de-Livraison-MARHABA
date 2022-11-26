@@ -1,0 +1,45 @@
+version: "3"
+services:
+  react-app:
+    #here we've to specify the location of our Makefile
+    build: ./Front-End/
+    stdin_open: true
+    #here we're mapping the exposed port i.e, 3000 to our machine port 3000.
+    # so that we can test the application on our port 3000.
+    ports: 
+      - "3000:3000"
+    networks:
+      - mern-app
+    volumes:
+      - ./Back-End/:/usr/src/app
+      - /usr/src/app/node_modules
+  api-server:
+    #here we've to specify the location of our Makefile
+    build: ./Back-End/
+    ports:
+    #here we're mapping the exposed port i.e, 5000 to our machine port 5000.
+    # so that we can test the application on our port 5000.
+      - "5000:5000"
+    networks:
+      - mern-app
+    volumes:
+      - ./Back-End/:/usr/src/app
+      - /usr/src/app/node_modules
+    depends_on:
+      - mongo
+  mongo:
+    #instead of build tag we're using image tag because we're using the official image of MongoDB
+    #this will pull the official image from the docker hub.
+    image: mongo:4.4-bionic
+    ports:
+      - "27017:27017"
+    networks:
+      - mern-app
+    volumes:
+      - mongo-data:/data/db
+networks:
+  mern-app:
+    driver: bridge
+volumes:
+  mongo-data:
+    driver: local
