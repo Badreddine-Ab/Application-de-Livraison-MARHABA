@@ -15,9 +15,7 @@ for (let i = 0; i < 25; i++) {
 }
 
 
-// method : post
-// url : api/auth/login
-// acces : Public
+
 const Roles = async(req,res)=> {
 
   Role.find({}, function(err, roles) {
@@ -31,6 +29,9 @@ const Roles = async(req,res)=> {
   });
 }
 
+// method : post
+// url : api/auth/login
+// acces : Public
  const Login =  async (req,res,next) => {
     const {email, password} = req.body
     

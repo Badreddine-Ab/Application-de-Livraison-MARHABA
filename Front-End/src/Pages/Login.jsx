@@ -58,7 +58,7 @@ export default function Login() {
             
             <Form  response={response} Title="Login" to='/register' error={error} navigate="You don't have an account ?" redirect="Signup here" state={form} setState={setForm} HandleSubmit={HandleSubmit}>
                 <Input handleChange={handleChange} name='email' state={form.email} setState={setForm} label="Your Email" placeHolder="badr@youcode.com" input="email"/>
-                <Input handleChange={handleChange} name ="password" state={form.password} setState={setForm} label="Your Password" placeHolder="*********" input="password"/>
+                <Input handleChange={handleChange} name ="password" state={form.password} setState={setForm} label="Your Password" placeHolder="password" input="password"/>
             </Form>
         </div>
 

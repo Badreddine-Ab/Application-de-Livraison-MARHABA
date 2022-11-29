@@ -4,7 +4,7 @@
   "description": "développer une application pour la restaurant mar7aba avec un service de livraison à domicile",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "start:prod": "NODE_ENV=production node server.js",
     "start:dev": "nodemon server.js"
   },
@@ -22,6 +22,8 @@
     "nodemailer": "^6.8.0"
   },
   "devDependencies": {
-    "nodemon": "^2.0.20"
+    "jest": "^29.3.1",
+    "nodemon": "^2.0.20",
+    "supertest": "^6.3.1"
   }
 }
